@@ -80,7 +80,7 @@
             <v-hover v-slot="{ isHovering, props }"> -->
 
         <v-sheet class="mx-auto" max-width="100%">
-          <v-slide-group show-arrows>
+          <v-slide-group show-arrows >
             <v-slide-group-item v-for="n in tabMenus" :key="n" v-slot="{ isSelected, toggle }">
               <!-- <v-btn
           class="ma-2"
@@ -90,9 +90,9 @@
         >
           Options {{ n }}
         </v-btn> -->
-              <v-card width="250" height="120" class="overflow-hidden pa-l ma-2 rounded-md" elevation="3">
+              <v-card width="250" height="120" class="overflow-hidden pa-l ma-2 rounded-md" elevation="3" style="background-color: #263238;" theme="dark">
 
-                <v-btn variant="text" class="float-sm-right">
+                <v-btn variant="text" class="float-sm-right" @click.stop="openDialog(n); mdContacts = !mdContacts;">
                   <!-- <v-icon color="orange-darken" end>
                       mdi-plus-circle
                     </v-icon> -->
@@ -139,6 +139,29 @@
 
       </v-row>
 
+      <v-row cols="12" sm="7" md="12" lg="7" class="overflow-hidden pa-l ma-2 rounded-md">
+        <v-col>
+          <div class="d-flex justify-space-around">
+    <div class="pa-4 text-center bg-secondary rounded-0">
+      .rounded-0
+    </div>
+  </div>
+  </v-col>
+        <v-col>
+          <div class="d-flex justify-space-around">
+    <div class="pa-4 text-center bg-secondary rounded-0">
+      .rounded-0
+    </div>
+  </div>
+        </v-col>
+        <v-col>
+          <div class="d-flex justify-space-around">
+    <div class="pa-4 text-center bg-secondary rounded-0">
+      .rounded-0
+    </div>
+  </div>
+        </v-col>
+      </v-row>
       <br>
 
       <v-divider></v-divider>
@@ -156,7 +179,7 @@
         <v-btn @click="isDialogOpen = true" v-bind="props" icon="mdi-plus-thick"></v-btn>
 
         <!-- DIALOG -->
-        <v-dialog width='800px' v-model="mdContacts">
+        <v-dialog width='850' v-model="mdContacts">
           <template #activator="{ props }">
           </template>
 
@@ -186,34 +209,99 @@
             </v-toolbar>
 
             <v-card-text v-if="this.modName.dialog == 'Contacts'">
-              <v-row>
-                <v-col>
-                  <v-text-field label="Nome completo" variant="outlined"></v-text-field>
-                </v-col>
-                <v-col>
-                  <v-text-field label="E-mail" variant="outlined" :rules="emailRules"></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-text-field label="SMS" variant="outlined"></v-text-field>
-                </v-col>
-                <v-col>
-                  <v-text-field label="WhatsApp" variant="outlined" :rules="emailRules1"></v-text-field>
-                </v-col>
-              </v-row>
-              <v-select label="Cargo" variant="outlined" :items="['Admin', 'Gerente', 'Convidado']"></v-select>
+              
+              <v-tabs v-model="tabs" align-tabs="centered">
+                <v-tab prepend-icon="mdi-information-outline">Detalhes</v-tab>
+                <v-tab prepend-icon="mdi-account-cog">Opções</v-tab>
+                <v-tab prepend-icon="mdi-account-multiple">Sailpoints</v-tab>
+                <v-tab prepend-icon="mdi-history">Histórico</v-tab>
+              </v-tabs>
 
-              <v-select label="Grupo" variant="outlined" :items="['Cliente', 'Empresa', 'Interno']"></v-select>
-
-              <v-select label="Campanha" variant="outlined" :items="['Marketing', 'Autenticação', 'Cobrança']"></v-select>
+              <v-window v-model="tabs">
+                <v-window-item v-model="details">
+              <!-- <v-card> -->
+              <!-- <v-card-title>
+          <span class="text-h5">User Profile</span>
+        </v-card-title> -->
+              <v-card-text>
+                <!-- <v-container> -->
+                <v-row>
+                  <v-col cols="12" sm="6" md="4" class="pa-0">
+                    <v-text-field label="Primeiro nome*" prepend-inner-icon="mdi-account" required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4" class="pa-0">
+                    <v-text-field label="Nome do meio" hint="example of helper text only on focus"></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4" class="pa-0">
+                    <v-text-field label="Último nome*" hint="example of persistent helper text" persistent-hint
+                      required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6" class="pa-0">
+                    <v-text-field label="Telefone*" type="telephone" prepend-inner-icon="mdi-phone" required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="5" md="6" class="pa-0 ml-0">
+                    <v-text-field label="SMS*" prepend-inner-icon="mdi-message-text" required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6" class="pa-0">
+                    <v-text-field label="E-mail*" prepend-inner-icon="mdi-email-fast-outline" required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6" class="pa-0">
+                    <v-text-field label="WhatsApp*" prepend-inner-icon="mdi-whatsapp" required></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6" class="pa-0">
+                    <v-select :items="['0-17', '18-29', '30-54', '54+']" label="Idade*" prepend-inner-icon="mdi-numeric-7" required></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6" class="pa-0">
+                    <v-autocomplete
+                      :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                      label="Interesses" prepend-inner-icon="mdi-set-center" multiple></v-autocomplete>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6" class="pa-0">
+                    <v-autocomplete :items="['Marketing', 'Autenticação', 'Cobrança']" label="Campanha" prepend-inner-icon="mdi-forum"
+                      multiple></v-autocomplete>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6" class="pa-0">
+                    <v-autocomplete :items="['Admin', 'Gerente', 'Convidado']" label="Cargo" prepend-inner-icon="mdi-account-key" multiple></v-autocomplete>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6" class="pa-0">
+                    <v-autocomplete :items="['Cliente', 'Empresa', 'Interno']" label="Grupo" prepend-inner-icon="mdi-account-multiple" multiple></v-autocomplete>
+                  </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-autocomplete :items="['Marketing', 'Autentificação', 'Cobrança']" label="Flex" prepend-inner-icon="mdi-shuffle"
+                            multiple></v-autocomplete>
+                        </v-col>
+                </v-row>
+                <!-- </v-container> -->
+                <small>*indicates required field</small>
+              </v-card-text>
+              <!-- <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue-darken-1"
+            variant="text"
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue-darken-1"
+            variant="text"
+            @click="dialog = false"
+          >
+            Save
+          </v-btn>
+        </v-card-actions> -->
+              <!-- </v-card> -->
+                </v-window-item>
+              </v-window>
             </v-card-text>
 
             <v-card-text v-if="this.modName.dialog == 'Groups'">
 
               <v-tabs v-model="tabs" align-tabs="centered">
-                <v-tab>Detalhes</v-tab>
-                <v-tab>Opções</v-tab>
+                <v-tab prepend-icon="mdi-information-outline">Detalhes</v-tab>
+                <v-tab prepend-icon="mdi-account-cog">Opções</v-tab>
+                <v-tab prepend-icon="mdi-account-multiple">Membros</v-tab>
               </v-tabs>
 
               <v-window v-model="tabs">
@@ -221,59 +309,132 @@
                   <v-card>
                     <v-card-text>
 
-                      <v-divider></v-divider>
-
-                      <v-text-field label="Nome do Grupo" variant="outlined"></v-text-field>
-                      <v-text-field label="Descrição" variant="outlined"></v-text-field>
-                      <v-text-field label="Departamento" variant="outlined"></v-text-field>
-                      <v-select label="Tipo de Conta" variant="outlined"
-                        :items="['Interno', 'Externo', 'Admin']"></v-select>
-                      <v-select label="Domínio" variant="outlined" :items="['Convidado', 'Administrador']"></v-select>
-                      <v-select label="Linguagem" variant="outlined"
-                        :items="['English', 'Português', 'François']"></v-select>
-                      <v-select label="Modo de Abertura" variant="outlined" :items="['Painel', 'Windows']"></v-select>
-                      <v-select label="Módulo Padrão" variant="outlined" :items="['Administração',
-                        'Gestão de Inventário',
-                        'Posto de Vendas',
-                        'Centro de Custos',
-                        'Gestão Hospitalar',
-                        'Contabilidade',
-                        'Finanças',
-                        'Recursos Humanos',
-                        'Utilidades',
-                        'Outros Módulos',
-                        'Directório',
-                        'Centro de Mensagens',
-                        'Centro de Relatórios',
-                        'Documentos',
-                        'Gestão de Cyber',
-                        'Gestão Acádemica',
-                        'Gestão Hoteleira',
-                        'Gestão de Ginásio',
-                        'Gestão de Rent-a-Car',
-                        'Gestão de Creche',
-                        'Acádemia de Música',
-                        'Centro de Vistos',
-                        'Estação de Serviço',
-                        'Gestão de Lavandaria',
-                        'Tesouraria',
-                        'Secretária',
-                        'Escola Sabatina']"></v-select>
-
                       <v-row>
-                        <v-col>
-                          <v-select label="Campanha" variant="outlined"
-                            :items="['Marketing', 'Autentificação', 'Cobrança']"></v-select>
+                        <v-col cols="12" sm="12" md="12" class="pa-0">
+                          <v-text-field label="Nome do Grupo*" prepend-inner-icon="mdi-account-multiple" required></v-text-field>
                         </v-col>
-                        <v-col>
-                          <v-select label="Grupo" variant="outlined"
-                            :items="['Cliente', 'Empresa', 'Interno']"></v-select>
+                        <v-col cols="12" sm="12" md="12" class="pa-0">
+                          <v-text-field label="Descrição" prepend-inner-icon="mdi-information-variant"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-autocomplete :items="['Admin', 'Gerente', 'Convidado']" label="Departamento" prepend-inner-icon="mdi-domain"
+                            multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-autocomplete :items="['Interno', 'Externo', 'Admin']" label="Tipo de Conta" prepend-inner-icon="mdi-account-badge-outline"
+                            multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-autocomplete :items="['Convidado', 'Administrador']" label="Domínio" prepend-inner-icon="mdi-security"
+                            multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-autocomplete :items="['English', 'Português', 'François']" label="Linguagem" prepend-inner-icon="mdi-translate"
+                            multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-autocomplete :items="['Painel', 'Windows']" label="Modo de Abertura" prepend-inner-icon="mdi-open-in-new"
+                            multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-autocomplete :items="['Marketing', 'Autentificação', 'Cobrança']" label="Campanha" prepend-inner-icon="mdi-message-star-outline"
+                            multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-autocomplete :items="['Administração',
+                            'Gestão de Inventário',
+                            'Posto de Vendas',
+                            'Centro de Custos',
+                            'Gestão Hospitalar',
+                            'Contabilidade',
+                            'Finanças',
+                            'Recursos Humanos',
+                            'Utilidades',
+                            'Outros Módulos',
+                            'Directório',
+                            'Centro de Mensagens',
+                            'Centro de Relatórios',
+                            'Documentos',
+                            'Gestão de Cyber',
+                            'Gestão Acádemica',
+                            'Gestão Hoteleira',
+                            'Gestão de Ginásio',
+                            'Gestão de Rent-a-Car',
+                            'Gestão de Creche',
+                            'Acádemia de Música',
+                            'Centro de Vistos',
+                            'Estação de Serviço',
+                            'Gestão de Lavandaria',
+                            'Tesouraria',
+                            'Secretária',
+                            'Escola Sabatina']" label="Módulo Padrão" prepend-inner-icon="mdi-view-grid" multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-autocomplete :items="['Marketing', 'Autentificação', 'Cobrança']" label="Flex" prepend-inner-icon="mdi-shuffle"
+                            multiple></v-autocomplete>
                         </v-col>
                       </v-row>
                     </v-card-text>
                   </v-card>
                 </v-window-item>
                 <v-window-item v-model="options">
+                  <v-card>
+                    <v-card-text>
+
+
+                      <v-divider></v-divider>
+
+                      <v-list lines="three" select-strategy="classic">
+                        <v-list-subheader>General</v-list-subheader>
+
+                        <v-list-item value="notifications">
+                          <template v-slot:prepend="{ isActive }">
+
+                            <v-list-item-action start>
+                              <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
+                            </v-list-item-action>
+                          </template>
+
+                          <v-list-item-title>Notificações</v-list-item-title>
+
+                          <v-list-item-subtitle>
+                            Notify me about updates to apps or games that I downloaded
+                          </v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item value="sound">
+                          <template v-slot:prepend="{ isActive }">
+                            <v-list-item-action start>
+                              <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
+                            </v-list-item-action>
+                          </template>
+
+                          <v-list-item-title>Flex</v-list-item-title>
+
+                          <v-list-item-subtitle>
+                            Auto-update apps at any time. Data charges may apply
+                          </v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item value="widgets">
+                          <template v-slot:prepend="{ isActive }">
+                            <v-list-item-action start>
+                              <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
+                            </v-list-item-action>
+                          </template>
+
+                          <v-list-item-title>Auto-add widgets</v-list-item-title>
+
+                          <v-list-item-subtitle>
+                            Automatically add home screen widgets when downloads complete
+                          </v-list-item-subtitle>
+                        </v-list-item>
+                      </v-list>
+
+                    </v-card-text>
+                  </v-card>
+                </v-window-item>
+                <v-window-item v-model="members">
                   <v-card>
                     <v-card-text>
 
@@ -343,21 +504,67 @@
               <v-window v-model="tabs">
                 <v-window-item v-model="details">
                   <v-card>
+                    <!-- <v-card-title>
+          <span class="text-h5">User Profile</span>
+        </v-card-title> -->
                     <v-card-text>
-
-                      <v-divider></v-divider>
-
-                      <v-text-field label="Nome da Campanha" variant="outlined"></v-text-field>
-                      <v-text-field label="Descrição" variant="outlined"></v-text-field>
-                      <v-select label="Tipo de Campanha" variant="outlined"
-                        :items="['Marketing', 'Comunicação Corporativa', 'Notificação', 'Cobrança']"></v-select>
-                      <v-select label="Destinatários" variant="outlined" :items="['Interno', 'Externo']"></v-select>
-                      <v-select label="Linguagem" variant="outlined"
-                        :items="['English', 'Português', 'François']"></v-select>
-
-                      <v-select label="Grupo" variant="outlined" :items="['Cliente', 'Empresa', 'Interno']"></v-select>
-
+                      <!-- <v-container> -->
+                      <v-row>
+                        <v-col cols="12" sm="12" md="12" class="pa-0">
+                          <v-text-field label="Título da Campanha" hint="example of helper text only on focus" prepend-inner-icon="mdi-format-title"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" class="pa-0">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="Grupo"  prepend-inner-icon="mdi-account-multiple"  multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" class="pa-0">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="Contactos"  prepend-inner-icon="mdi-account"  multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-text-field label="Data*"  prepend-inner-icon="mdi-calendar"  required></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6" class="pa-0">
+                          <v-text-field label="Hora" prepend-inner-icon="mdi-clock-outline"  hint="example of helper text only on focus"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" class="pa-0">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="SMS"  prepend-inner-icon="mdi-message-settings-outline"  multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="12" class="pa-0">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="E-mail"  prepend-inner-icon="mdi-email-outline"  multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="12" class="pa-0">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="Telefone"  prepend-inner-icon="mdi-phone"  multiple></v-autocomplete>
+                        </v-col>
+                      </v-row>
+                      <!-- </v-container> -->
+                      <small>*indicates required field</small>
                     </v-card-text>
+                    <!-- <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue-darken-1"
+            variant="text"
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue-darken-1"
+            variant="text"
+            @click="dialog = false"
+          >
+            Save
+          </v-btn>
+        </v-card-actions> -->
                   </v-card>
                 </v-window-item>
                 <v-window-item v-model="options">
@@ -419,7 +626,8 @@
               </v-window>
             </v-card-text>
 
-            <v-card-text v-if="this.modName.dialog == 'Booking'">
+            <v-card-text
+              v-if="this.modName.dialog == 'Messages' | this.modName.dialog == 'Chamadas' | this.modName.dialog == 'WhatsApp' | this.modName.dialog == 'E-mail'">
 
               <v-tabs v-model="tabs" align-tabs="centered">
                 <v-tab>Detalhes</v-tab>
@@ -429,18 +637,43 @@
               <v-window v-model="tabs">
                 <v-window-item v-model="details">
                   <v-card>
+                    <!-- <v-card-title>
+          <span class="text-h5">User Profile</span>
+        </v-card-title> -->
                     <v-card-text>
-
-                      <v-divider></v-divider>
-
-                      
-                      <v-select label="Campanhas" variant="outlined" :items="['Cliente', 'Empresa', 'Interno']"></v-select>
-                      <v-text-field label="Descrição" variant="outlined"></v-text-field>                     
-                      <v-select label="Linguagem" variant="outlined"
-                        :items="['English', 'Português', 'François']"></v-select>
-
-
+                      <!-- <v-container> -->
+                      <v-row>
+                        <v-col cols="12" sm="12" class="pa-0">
+                          <v-autocomplete :items="['SMS', 'Telefone', 'WhatsApp', 'E-mail']" label="Categoria" prepend-inner-icon="mdi-cube-send"
+                            multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="12" md="12" class="pa-0">
+                          <v-text-field label="Título" hint="example of helper text only on focus" prepend-inner-icon="mdi-format-title"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12" md="12" class="pa-0">
+                          <v-textarea label="Mensagem*" prepend-inner-icon="mdi-message-text-outline" required></v-textarea>
+                        </v-col>
+                      </v-row>
+                      <!-- </v-container> -->
+                      <small>*indicates required field</small>
                     </v-card-text>
+                    <!-- <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue-darken-1"
+            variant="text"
+            @click="dialog = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue-darken-1"
+            variant="text"
+            @click="dialog = false"
+          >
+            Save
+          </v-btn>
+        </v-card-actions> -->
                   </v-card>
                 </v-window-item>
                 <v-window-item v-model="options">
@@ -502,10 +735,209 @@
               </v-window>
             </v-card-text>
 
+            <v-card-text v-if="this.modName.dialog == 'Histórico'">
+
+              <v-tabs v-model="tabs" align-tabs="centered">
+                <v-tab>Detalhes</v-tab>
+                <v-tab>Opções</v-tab>
+              </v-tabs>
+
+              <v-window v-model="tabs">
+                <v-window-item v-model="details">
+                  <v-card>
+                    <!-- <v-card-title>
+<span class="text-h5">User Profile</span>
+</v-card-title> -->
+                    <v-card-text>
+                      <!-- <v-container> -->
+                      <v-row>
+                        <v-col cols="12" sm="6">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="Grupo" multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="Contactos" multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field label="Data*" required></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="6" md="6">
+                          <v-text-field label="Hora" hint="example of helper text only on focus"></v-text-field>
+                        </v-col>
+                        <v-col cols="12" sm="12">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="SMS" multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="12">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="E-mail" multiple></v-autocomplete>
+                        </v-col>
+                        <v-col cols="12" sm="12">
+                          <v-autocomplete
+                            :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
+                            label="Telefone" multiple></v-autocomplete>
+                        </v-col>
+                      </v-row>
+                      <!-- </v-container> -->
+                      <small>*indicates required field</small>
+                    </v-card-text>
+                    <!-- <v-card-actions>
+<v-spacer></v-spacer>
+<v-btn
+color="blue-darken-1"
+variant="text"
+@click="dialog = false"
+>
+Close
+</v-btn>
+<v-btn
+color="blue-darken-1"
+variant="text"
+@click="dialog = false"
+>
+Save
+</v-btn>
+</v-card-actions> -->
+                  </v-card>
+                </v-window-item>
+                <v-window-item v-model="options">
+                  <v-card>
+                    <v-card-text>
+
+                      <v-divider></v-divider>
+
+                      <v-list lines="three" select-strategy="classic">
+                        <v-list-subheader>General</v-list-subheader>
+
+                        <v-list-item value="notifications">
+                          <template v-slot:prepend="{ isActive }">
+
+                            <v-list-item-action start>
+                              <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
+                            </v-list-item-action>
+                          </template>
+
+                          <v-list-item-title>Notificações</v-list-item-title>
+
+                          <v-list-item-subtitle>
+                            Notify me about updates to apps or games that I downloaded
+                          </v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item value="sound">
+                          <template v-slot:prepend="{ isActive }">
+                            <v-list-item-action start>
+                              <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
+                            </v-list-item-action>
+                          </template>
+
+                          <v-list-item-title>Flex</v-list-item-title>
+
+                          <v-list-item-subtitle>
+                            Auto-update apps at any time. Data charges may apply
+                          </v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item value="widgets">
+                          <template v-slot:prepend="{ isActive }">
+                            <v-list-item-action start>
+                              <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
+                            </v-list-item-action>
+                          </template>
+
+                          <v-list-item-title>Auto-add widgets</v-list-item-title>
+
+                          <v-list-item-subtitle>
+                            Automatically add home screen widgets when downloads complete
+                          </v-list-item-subtitle>
+                        </v-list-item>
+                      </v-list>
+
+                    </v-card-text>
+                  </v-card>
+                </v-window-item>
+              </v-window>
+            </v-card-text>
+
+
+            <v-card-text v-if="this.modName.dialog == 'Settings'">
+
+              <v-tabs v-model="tabs" align-tabs="centered">
+                <v-tab>Detalhes</v-tab>
+                <v-tab>Opções</v-tab>
+              </v-tabs>
+
+              <v-window v-model="tabs">
+                <v-window-item v-model="details">
+                 
+                </v-window-item>
+                <v-window-item v-model="options">
+                  <v-card>
+                    <v-card-text>
+
+                      <v-divider></v-divider>
+
+                      <v-list lines="three" select-strategy="classic">
+                        <v-list-subheader>General</v-list-subheader>
+
+                        <v-list-item value="notifications">
+                          <template v-slot:prepend="{ isActive }">
+
+                            <v-list-item-action start>
+                              <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
+                            </v-list-item-action>
+                          </template>
+
+                          <v-list-item-title>Notificações</v-list-item-title>
+
+                          <v-list-item-subtitle>
+                            Notify me about updates to apps or games that I downloaded
+                          </v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item value="sound">
+                          <template v-slot:prepend="{ isActive }">
+                            <v-list-item-action start>
+                              <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
+                            </v-list-item-action>
+                          </template>
+
+                          <v-list-item-title>Flex</v-list-item-title>
+
+                          <v-list-item-subtitle>
+                            Auto-update apps at any time. Data charges may apply
+                          </v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item value="widgets">
+                          <template v-slot:prepend="{ isActive }">
+                            <v-list-item-action start>
+                              <v-checkbox-btn :model-value="isActive"></v-checkbox-btn>
+                            </v-list-item-action>
+                          </template>
+
+                          <v-list-item-title>Auto-add widgets</v-list-item-title>
+
+                          <v-list-item-subtitle>
+                            Automatically add home screen widgets when downloads complete
+                          </v-list-item-subtitle>
+                        </v-list-item>
+                      </v-list>
+
+                    </v-card-text>
+                  </v-card>
+                </v-window-item>
+              </v-window>
+            </v-card-text>
             <v-card-actions class="align-content-end">
               <v-spacer></v-spacer>
-              <v-btn variant="text" @click="mdContacts = false">Cancelar</v-btn>
-              <v-btn color="success" :ripple="true">Guardar</v-btn>
+              <v-btn variant="text" @click="mdContacts = false" prepend-icon="mdi-close-circle">Cancelar</v-btn>
+              <v-btn color="success" :ripple="true" prepend-icon="mdi-content-save-outline">Guardar</v-btn>
             </v-card-actions>
 
             <v-window v-model="tab">
@@ -937,17 +1369,17 @@ export default {
       },
     ],
     tabMenus: [
-      { text: 'Dashboard', icon: 'mdi-view-dashboard', to: '/', descr: 'Secção de Gráficos', dialog: 'isDialogOpen' },
+      // { text: 'Dashboard', icon: 'mdi-view-dashboard', to: '/', descr: 'Secção de Gráficos', dialog: 'isDialogOpen' },
       { text: 'Contactos', icon: 'mdi-account', to: 'contacts', descr: 'Directório de Contactos', dialog: 'Contacts', size: '400px' },
       { text: 'Grupos', icon: 'mdi-account-group', to: 'groups', descr: 'Directório de Grupos de Contactos', dialog: 'Groups', size: '400px' },
       { text: 'Campanhas', icon: 'mdi-account-voice', to: 'campaigns', descr: 'Campanhas', dialog: 'Campaigns' },
-      { text: 'Agendamento', icon: 'mdi-account-clock', to: 'calendar', descr: 'Agendamento', dialog: 'Booking' },
-      { text: 'Mensagem', icon: 'mdi-message-plus', to: 'message', descr: 'Mensagens', dialog: 'isDialogOpen' },
-      { text: 'Chamadas', icon: 'mdi-phone-settings', to: 'calls', descr: 'Chamadas Automaticas', dialog: 'isDialogOpen' },
-      { text: 'WhatsApp', icon: 'mdi-whatsapp', to: 'whatsapp', descr: 'Enviar mensagens via WhatsApp', dialog: 'isDialogOpen' },
-      { text: 'E-mail', icon: 'mdi-email-fast-outline', to: 'email', descr: 'E-mails', dialog: 'isDialogOpen' },
-      { text: 'Histórico', icon: 'mdi-history', to: 'history', descr: 'Acesse ao hsitóricos de operações', dialog: 'isDialogOpen' },
-      { text: 'Configuarções', icon: 'mdi-cog', to: 'settings', descr: 'Configirações gerais', dialog: 'isDialogOpen=true' }
+      // { text: 'Agendamento', icon: 'mdi-account-clock', to: 'calendar', descr: 'Agendamento', dialog: 'Booking' },
+      { text: 'Mensagens', icon: 'mdi-message-plus', to: 'message', descr: 'Mensagens', dialog: 'Messages' },
+      { text: 'Chamadas', icon: 'mdi-phone-settings', to: 'calls', descr: 'Chamadas Automaticas', dialog: 'Chamadas' },
+      { text: 'WhatsApp', icon: 'mdi-whatsapp', to: 'whatsapp', descr: 'Enviar mensagens via WhatsApp', dialog: 'WhatsApp' },
+      { text: 'E-mail', icon: 'mdi-email-fast-outline', to: 'email', descr: 'E-mails', dialog: 'E-mail' },
+      { text: 'Histórico', icon: 'mdi-history', to: 'history', descr: 'Acesse ao hsitóricos de operações', dialog: 'Histórico' },
+      { text: 'Configurações', icon: 'mdi-cog', to: 'settings', descr: 'Configirações gerais', dialog: 'Settings' }
     ],
     dialogs: [
       {
@@ -1014,3 +1446,25 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-label {
+  font-size: small;
+}
+
+.v-icon {
+  font-size: small;
+}
+
+.v-card-subtitle {
+  font-size: small;
+}
+
+.v-btn {
+  font-size: small;
+}
+
+.v-text-field {
+  font-size: small;
+}
+</style>
