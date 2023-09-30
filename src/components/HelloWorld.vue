@@ -1869,7 +1869,7 @@ export default {
     alert: false,
     showModal: false,
     model: 'rounded-0',
-    modName: '',
+    modName: true,
     modalText: '',
     drawer: false,
     group: null,
