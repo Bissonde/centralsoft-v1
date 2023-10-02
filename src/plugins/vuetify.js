@@ -36,7 +36,7 @@ export default createVuetify({
         colors: {
           primary: '#1867C0',
           secondary: '#5CBBF6',
-          brand: '#2F76234',
+          // brand: '#2F76234',
           // background: colors.indigo.lighten5,
         },
       },
@@ -44,7 +44,7 @@ export default createVuetify({
         colors: {
           primary: '#1867C0',
           secondary: '#5CBBF6',
-          brand: '#2F76234',
+          // brand: '#2F76234',
           // background: colors.indigo.base,
         },
       },

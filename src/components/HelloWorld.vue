@@ -208,29 +208,15 @@
               <v-divider class="mb-6"></v-divider>
 
               <v-row cols="12" sm="6" md="6" lg="6">
-                <!-- <v-col v-for="(item,i) in items" :key="i">
-            <v-hover v-slot="{ isHovering, props }"> -->
-
                 <v-sheet class="mx-auto" max-width="100%" height="auto">
                   <v-slide-group show-arrows>
                     <v-slide-group-item v-for="n in tabMenus" :key="n" v-slot="{ isSelected, toggle }">
-                      <!-- <v-btn
-          class="ma-2"
-          rounded
-          :color="isSelected ? 'primary' : undefined"
-          @click="toggle"
-        >
-          Options {{ n }}
-        </v-btn> -->
                       <v-card width="250" class="overflow-hidden pa-l ma-2 rounded-sm" elevation="3"
                         style="height: 100px; background-color: #CFD8DC;  border-bottom:solid #0277BD 5px; border-bottom-left-radius: 10px 10px; border-bottom-right-radius: 10px 10px;"
                         theme="light">
                         <!-- #263238 -->
 
-                        <v-btn variant="text" class="float-sm-right" @click.stop="openDialog(this.modName); editModal = !editModal;">
-                          <!-- <v-icon color="orange-darken" end>
-                      mdi-plus-circle
-                    </v-icon> -->
+                        <v-btn variant="text" class="float-sm-right" @click.stop="openDialog(n); editModal = !editModal;">
                           <v-icon color="orange-darken-4" end>
                             mdi-open-in-new
                           </v-icon>
@@ -240,35 +226,11 @@
                           <v-icon>{{ n.icon }}</v-icon>&nbsp;{{ n.title }}
                           <v-label>{{ n.text }}</v-label>
                         </v-card-title>
-
-                        <!-- <v-card-subtitle style="">{{ n.descr }}</v-card-subtitle> -->
-
                         <v-card-actions class="d-flex justify-end">
-
-
-                          <!-- <v-btn variant="plain" @click.stop="triggerDialog(n.dialog)">
-                    Expandir -->
-                          <!-- <v-icon
-                color="orange-darken-4"
-                end
-              >
-                mdi-open-in-new
-              </v-icon> -->
-                          <!-- </v-btn> -->
-
                           <v-btn variant="text" @click.stop="openDialog(n); editModal = !editModal;"
                             v-bind="props">Adicionar</v-btn>
-
                           <v-btn variant="plain" class="float-sm-left">
                             Detalhes
-
-
-                            <!-- <v-icon
-                color="orange-darken-4"
-                end
-              >
-              mdi-eye
-              </v-icon> -->
                           </v-btn>
                         </v-card-actions>
                       </v-card>
@@ -632,25 +594,13 @@
 
                         <v-btn color="white" icon="mdi-dots-vertical"></v-btn>
                       </template>
-                      
-     <template v-slot:append class="align-content-end">
-                              <v-spacer></v-spacer>
-                            <v-btn color="warning" variant="tonal" @click="editModal = false; onclose();"
-                              prepend-icon="mdi-close-circle"></v-btn>&nbsp;
-                            <v-btn variant="tonal" color="success" type="submit"
-                              @click="checkInput(); if (isOkToSubmit != '') { alert = !alert; loading = !loading; dialog = !dialog; hide_alert(); }"
-                              :ripple="true" :disabled="loading" :loading="loading" prepend-icon="mdi-content-save-outline">
-                              <template v-slot:loader>
-                                <v-progress-linear indeterminate></v-progress-linear>
-                              </template>
-                            </v-btn></template>
                     </v-toolbar>
 
                     <v-alert type="success" title="Sucesso" v-if="alert == true" transition="slide-y-transition"
                       border="start" variant="tonal" v-model="alert" closable
                       text="As suas alterações foram gravadas com sucesso!"></v-alert>
 
-                    <v-card-text v-if="this.modName.dialog === 'Contacts'">
+                    <v-card-text v-if="this.modName.dialog == 'Contacts'">
 
                       <v-tabs v-model="tabs" align-tabs="centered">
                         <v-tab prepend-icon="mdi-information-outline">Detalhes</v-tab>
@@ -734,7 +684,6 @@
                         </v-window-item>
                       </v-window>
                     </v-card-text>
-                    
 
                     <v-card-text v-if="this.modName.dialog == 'Groups'">
 
@@ -1801,6 +1750,7 @@ Save
 //
 import { ref } from 'vue';
 import { useField, useForm } from 'vee-validate'
+
 import ChartComponent from '@/components/ChartComponent.vue'
 import ChartComponent1 from '@/components/ChartComponent1.vue'
 import ChartComponent2 from '@/components/ChartComponent2.vue'
@@ -1850,11 +1800,6 @@ setTimeout(() => {
 
 <script>
 export default {
-  // data: () => {
-  //   return{
-  //     veditModal: true
-  //   }
-  // },
   data: () => ({
     isActiveBtn: false,
     isEditing: false,
@@ -1882,7 +1827,9 @@ export default {
     alert: false,
     showModal: false,
     model: 'rounded-0',
-    modName: {text: 'Contactos', icon: 'mdi-account', to: 'contacts', descr: 'Directório de Contactos', dialog: 'Contacts', size: '400px'},
+    modName: { text: 'Contactos', icon: 'mdi-account', to: 'contacts', descr: 'Directório de Contactos', dialog: 'Contacts', size: '400px' },
+    props: false,
+    text: '',
     modalText: '',
     drawer: false,
     group: null,
@@ -2025,7 +1972,8 @@ export default {
     document.onreadystatechange = () => {
       if (document.readyState == "complete") {
         this.modName = null,
-        this.isLoaded = true;
+          this.isLoaded = true;
+          // alert(true)
       }
     }
 
@@ -2110,9 +2058,9 @@ export default {
       }, 5 * 1000);
     },
     openDialog: function (item) {
-      console.log(item)
       this.modName = item
-      alert(this.modName.dialog)
+      console.log(item)
+      alert(item.dialog)
     },
   }
 }

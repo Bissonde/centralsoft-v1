@@ -28,7 +28,7 @@ const data = {
     }]
 };
 Chart.defaults.font.size = 16;
-Chart.defaults.font.style = 'italics';
+// Chart.defaults.font.style = 'italics';
 Chart.defaults.lineHeight = '1.2';
 Chart.defaults.font.family = "'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'";
 Chart.defaults.font.weight = '500';
