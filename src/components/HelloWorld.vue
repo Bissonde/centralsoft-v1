@@ -227,7 +227,7 @@
                         theme="light">
                         <!-- #263238 -->
 
-                        <v-btn variant="text" class="float-sm-right" @click.stop="openDialog(n); editModal = !editModal;">
+                        <v-btn variant="text" class="float-sm-right" @click.stop="openDialog(this.modName); editModal = !editModal;">
                           <!-- <v-icon color="orange-darken" end>
                       mdi-plus-circle
                     </v-icon> -->
@@ -256,7 +256,7 @@
               </v-icon> -->
                           <!-- </v-btn> -->
 
-                          <v-btn variant="text" @click.stop="openDialog(n); editModal = !editModal;"
+                          <v-btn variant="text" @click.stop="openDialog(this.modName); editModal = !editModal;"
                             v-bind="props">Adicionar</v-btn>
 
                           <v-btn variant="plain" class="float-sm-left">
@@ -2099,15 +2099,7 @@ export default {
     openDialog: function (item) {
       console.log(item)
       this.modName = item
-      alert(item.dialog)
-      if (item.dialog == 'editModal') {
-        // document.getElementById('editModal').style.visibility = "visible";
-        // document.getElementById('editModal').display = "block";
-      }
-      else {
-        // veditModal = false
-        // vmdGroups = true
-      }
+      alert(this.modName.dialog)
     },
   }
 }
