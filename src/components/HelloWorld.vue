@@ -2047,7 +2047,7 @@ export default {
     },
     checkInput: function () {
       // alert(this.modName.dialog)
-      if (this.modName.dialog == 'Contacts') {
+      if (this.modName && this.modName.dialog == 'Contacts') {
         this.isOkToSubmit = this.firstName && this.lastName
       }
       else if (this.modName.dialog == 'Groups') {
@@ -2099,7 +2099,7 @@ export default {
     openDialog: function (item) {
       console.log(item)
       this.modName = item
-
+      alert(item.dialog)
       if (item.dialog == 'editModal') {
         // document.getElementById('editModal').style.visibility = "visible";
         // document.getElementById('editModal').display = "block";
