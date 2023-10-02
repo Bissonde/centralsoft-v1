@@ -256,7 +256,7 @@
               </v-icon> -->
                           <!-- </v-btn> -->
 
-                          <v-btn variant="text" @click.stop="openDialog(this.modName); editModal = !editModal;"
+                          <v-btn variant="text" @click.stop="openDialog(n); editModal = !editModal;"
                             v-bind="props">Adicionar</v-btn>
 
                           <v-btn variant="plain" class="float-sm-left">
@@ -632,6 +632,18 @@
 
                         <v-btn color="white" icon="mdi-dots-vertical"></v-btn>
                       </template>
+                      
+     <template v-slot:append class="align-content-end">
+                              <v-spacer></v-spacer>
+                            <v-btn color="warning" variant="tonal" @click="editModal = false; onclose();"
+                              prepend-icon="mdi-close-circle"></v-btn>&nbsp;
+                            <v-btn variant="tonal" color="success" type="submit"
+                              @click="checkInput(); if (isOkToSubmit != '') { alert = !alert; loading = !loading; dialog = !dialog; hide_alert(); }"
+                              :ripple="true" :disabled="loading" :loading="loading" prepend-icon="mdi-content-save-outline">
+                              <template v-slot:loader>
+                                <v-progress-linear indeterminate></v-progress-linear>
+                              </template>
+                            </v-btn></template>
                     </v-toolbar>
 
                     <v-alert type="success" title="Sucesso" v-if="alert == true" transition="slide-y-transition"
@@ -722,6 +734,7 @@
                         </v-window-item>
                       </v-window>
                     </v-card-text>
+                    
 
                     <v-card-text v-if="this.modName.dialog == 'Groups'">
 
