@@ -638,7 +638,7 @@
                       border="start" variant="tonal" v-model="alert" closable
                       text="As suas alterações foram gravadas com sucesso!"></v-alert>
 
-                    <v-card-text v-if="modName.dialog == 'Contacts'">
+                    <v-card-text v-if="this.modName.dialog == 'Contacts'">
 
                       <v-tabs v-model="tabs" align-tabs="centered">
                         <v-tab prepend-icon="mdi-information-outline">Detalhes</v-tab>
@@ -1869,7 +1869,7 @@ export default {
     alert: false,
     showModal: false,
     model: 'rounded-0',
-    modName: true,
+    modName: '',
     modalText: '',
     drawer: false,
     group: null,
@@ -2011,6 +2011,7 @@ export default {
 
     document.onreadystatechange = () => {
       if (document.readyState == "complete") {
+        modName = "Contactos"
         this.isLoaded = true;
       }
     }
