@@ -2011,7 +2011,7 @@ export default {
 
     document.onreadystatechange = () => {
       if (document.readyState == "complete") {
-        modName = "Contactos"
+        this.modName = null,
         this.isLoaded = true;
       }
     }
