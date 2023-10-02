@@ -1869,7 +1869,7 @@ export default {
     alert: false,
     showModal: false,
     model: 'rounded-0',
-    modName: '',
+    modName: {text: 'Contactos', icon: 'mdi-account', to: 'contacts', descr: 'Directório de Contactos', dialog: 'Contacts', size: '400px'},
     modalText: '',
     drawer: false,
     group: null,
