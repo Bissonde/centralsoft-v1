@@ -210,24 +210,24 @@
               <v-row cols="12" sm="6" md="6" lg="6">
                 <v-sheet class="mx-auto" max-width="100%" height="auto">
                   <v-slide-group show-arrows>
-                    <v-slide-group-item v-for="n in tabMenus" :key="n" v-slot="{ isSelected, toggle }">
+                    <v-slide-group-item v-for="(n, index) in tabMenus" :key="n" v-slot="{ isSelected, toggle }">
                       <v-card width="250" class="overflow-hidden pa-l ma-2 rounded-sm" elevation="3"
                         style="height: 100px; background-color: #CFD8DC;  border-bottom:solid #0277BD 5px; border-bottom-left-radius: 10px 10px; border-bottom-right-radius: 10px 10px;"
                         theme="light">
                         <!-- #263238 -->
 
-                        <v-btn variant="text" class="float-sm-right" @click.stop="openDialog(n); editModal = !editModal;">
+                        <v-btn variant="text" class="float-sm-right" @click.stop="openDialog(n.dialog);   moduleStore.setModule(n);  editModal = !editModal;">
                           <v-icon color="orange-darken-4" end>
                             mdi-open-in-new
                           </v-icon>
                         </v-btn>
 
-                        <v-card-title class="text-h5">
-                          <v-icon>{{ n.icon }}</v-icon>&nbsp;{{ n.title }}
-                          <v-label>{{ n.text }}</v-label>
+                        <v-card-title>
+                          <v-icon class="text-h5">{{ n.icon }}</v-icon>&nbsp;{{ n.title }}
+                          <v-label class="text-h6">{{ n.text }}</v-label>
                         </v-card-title>
                         <v-card-actions class="d-flex justify-end">
-                          <v-btn variant="text" @click.stop="openDialog(n); editModal = !editModal;"
+                          <v-btn variant="text" @click.stop="openDialog(n); moduleStore.setModule(n.dialog); editModal = !editModal;" v-on:click="moduleStore.setModule(n);" v-model="useModule.name"
                             v-bind="props">Adicionar</v-btn>
                           <v-btn variant="plain" class="float-sm-left">
                             Detalhes
@@ -566,17 +566,19 @@
                 <!-- <v-btn @click="isDialogOpen = true" v-bind="props" icon="mdi-plus-thick"></v-btn> -->
 
                 <!-- EDIT MODAL DIALOG -->
-                <v-dialog width='850' v-model="editModal" v-on:close="" persistent>
+                <v-dialog width='850' v-model="editModal" v-on:close="" v-on:open="beforeOpen" persistent>
                   <template #activator="{ props }">
                   </template>
 
                   <v-card>
                     <v-toolbar color="primary">
                       <template v-slot:prepend>
-                        <v-toolbar-title bg-color="deep-purple-darken-4"><v-icon>{{ this.modName.icon
+                        <v-toolbar-title bg-color="deep-purple-darken-4" v-model="useModule.name"><v-icon>{{useModule.icon
                         }}</v-icon>&nbsp;{{
-  this.modName.text }}</v-toolbar-title>
+ useModule.text }}</v-toolbar-title>
                       </template>
+
+                      <!-- <input id="MID" v-model="useModule.name" /> -->
                       <v-btn role="link" @click="handleClick(); isEditing = !isEditing" class="activateBtn"
                         :style="{ color: activateBtn ? 'white' : 'blue', color: activateBtn ? 'black' : 'white' }"
                         color="white" variant="text" icon="mdi-pencil"></v-btn>
@@ -600,7 +602,7 @@
                       border="start" variant="tonal" v-model="alert" closable
                       text="As suas alterações foram gravadas com sucesso!"></v-alert>
 
-                    <v-card-text v-if="this.modName.dialog == 'Contacts'">
+                    <v-card-text v-if="useModule.dialog == 'Contacts'">
 
                       <v-tabs v-model="tabs" align-tabs="centered">
                         <v-tab prepend-icon="mdi-information-outline">Detalhes</v-tab>
@@ -685,7 +687,7 @@
                       </v-window>
                     </v-card-text>
 
-                    <v-card-text v-if="this.modName.dialog == 'Groups'">
+                    <v-card-text v-if="useModule.dialog == 'Groups'">
 
                       <v-tabs v-model="tabs" align-tabs="centered">
                         <v-tab prepend-icon="mdi-information-outline">Detalhes</v-tab>
@@ -892,7 +894,7 @@
                       </v-window>
                     </v-card-text>
 
-                    <v-card-text v-if="this.modName.dialog == 'Campaigns'">
+                    <v-card-text v-if="useModule.dialog == 'Campaigns'">
 
                       <v-tabs v-model="tabs" align-tabs="centered">
                         <v-tab>Detalhes</v-tab>
@@ -1016,7 +1018,7 @@
                     </v-card-text>
 
                     <v-card-text
-                      v-if="this.modName.dialog == 'Messages' | this.modName.dialog == 'Chamadas' | this.modName.dialog == 'WhatsApp' | this.modName.dialog == 'E-mail'">
+                      v-if="useModule.dialog== 'Messages' | useModule.dialog== 'Chamadas' | useModule.dialog== 'WhatsApp' | useModule.dialog== 'E-mail'">
 
                       <v-tabs v-model="tabs" align-tabs="centered">
                         <v-tab>Detalhes</v-tab>
@@ -1111,7 +1113,7 @@
                       </v-window>
                     </v-card-text>
 
-                    <v-card-text v-if="this.modName.dialog == 'Contas'">
+                    <v-card-text v-if="useModule.dialog == 'Contas'">
 
                       <v-tabs v-model="tabs" align-tabs="centered">
                         <v-tab prepend-icon="mdi-information-outline">Detalhes</v-tab>
@@ -1205,7 +1207,7 @@
                       </v-window>
                     </v-card-text>
 
-                    <v-card-text v-if="this.modName.dialog == 'Histórico'">
+                    <v-card-text v-if="useModule.dialog == 'Histórico'">
 
                       <v-tabs v-model="tabs" align-tabs="centered">
                         <v-tab>Detalhes</v-tab>
@@ -1336,7 +1338,7 @@ Save
                     </v-card-text>
 
 
-                    <v-card-text v-if="this.modName.dialog == 'Settings'">
+                    <v-card-text v-if="useModule.dialog == 'Settings'">
 
                       <v-tabs v-model="tabs" align-tabs="centered">
                         <v-tab>Detalhes</v-tab>
@@ -1405,6 +1407,7 @@ Save
                         </v-window-item>
                       </v-window>
                     </v-card-text>
+
                     <v-card-actions class="align-content-end">
                       <v-spacer></v-spacer>
                       <v-btn color="warning" variant="tonal" @click="editModal = false; onclose();"
@@ -1438,12 +1441,13 @@ Save
                   <v-card>
                     <v-toolbar color="primary">
 
-                      <v-toolbar-title bg-color="deep-purple-darken-4"><v-icon>{{ this.modName.icon
-                      }}</v-icon>&nbsp;{{
-  this.modName.text }}</v-toolbar-title>
+                      <v-toolbar-title bg-color="deep-purple-darken-4"><v-icon>{{useModule.icon
+                      }}</v-icon>&nbsp;{{ useModule.text }}</v-toolbar-title>
 
                       <template v-slot:append>
-                        <v-icon icon="mdi-close-circle"></v-icon>
+                        <!-- <v-icon icon="mdi-close-circle"></v-icon> -->
+                         <v-btn color="white" variant="text" @click="viewModal = false; onclose();"
+                          prepend-icon="mdi-close-circle"></v-btn>
                       </template>
 
                     </v-toolbar>
@@ -1748,14 +1752,20 @@ Save
 
 <script setup>
 //
-import { ref } from 'vue';
+// import { ref } from 'vue';
+import { ref, onMounted } from "vue";
 import { useField, useForm } from 'vee-validate'
 
-import ChartComponent from '@/components/ChartComponent.vue'
+import ChartComponent  from '@/components/ChartComponent.vue'
 import ChartComponent1 from '@/components/ChartComponent1.vue'
 import ChartComponent2 from '@/components/ChartComponent2.vue'
 import ChartComponent3 from '@/components/ChartComponent3.vue'
 import ChartComponent4 from '@/components/ChartComponent4.vue'
+
+
+
+import { useModuleStore } from '@/stores/TaskStore';
+const moduleStore = useModuleStore()
 
 const { handleSubmit, handleReset } = useForm({
   validationSchema: {
@@ -1765,6 +1775,10 @@ const { handleSubmit, handleReset } = useForm({
     }
   }
 })
+// Vue.prototype.$modNameX = 'Vasco'
+// const $modNameX = ref({
+//   dialog: window.localStorage.getItem('dialog')
+// });
 
 const name = useField('name')
 const editModal = ref(false)
@@ -1794,13 +1808,21 @@ const emailRules = [
 
 const msg = 'Produto'
 setTimeout(() => {
-  "Hello"
+  // "Hello"
 }, 300);
+
+
+onMounted(() => {
+//  alert(useModule.dialog)
+});
 </script>
 
 <script>
+const useModule = useModuleStore()
+
 export default {
   data: () => ({
+    modNameX: '',
     isActiveBtn: false,
     isEditing: false,
     viewMainForm: false,
@@ -1827,7 +1849,6 @@ export default {
     alert: false,
     showModal: false,
     model: 'rounded-0',
-    modName: { text: 'Contactos', icon: 'mdi-account', to: 'contacts', descr: 'Directório de Contactos', dialog: 'Contacts', size: '400px' },
     props: false,
     text: '',
     modalText: '',
@@ -1947,6 +1968,7 @@ export default {
     ]
     // vmdGroups: false,
   }),
+  
 
   watch: {
     group() {
@@ -1971,17 +1993,26 @@ export default {
 
     document.onreadystatechange = () => {
       if (document.readyState == "complete") {
-        this.modName = null,
+        $modNameX = null,
           this.isLoaded = true;
           // alert(true)
       }
     }
+
+    // alert(window.localStorage.getItem('dialog'))
+    if(window.localStorage.getItem('dialog') != ''){
+    }
+
+    // alert(this.modName)
 
     // $(this.$ref.modal)
     //   this.firstName = '',
     //   this.lastName = ''
   },
   methods: {
+     beforeOpen(event) {
+      alert('Opening...')
+    },
     // getGraph: function () {
     //   new Chart(ctx, {
     //     type: 'bar',
@@ -2007,26 +2038,26 @@ export default {
         this.lastName = ''
     },
     checkInput: function () {
-      // alert(this.modName.dialog)
-      if (this.modName && this.modName.dialog == 'Contacts') {
+      // alert(useModule.dialog)
+      if (this.modName == 'Contacts') {
         this.isOkToSubmit = this.firstName && this.lastName
       }
-      else if (this.modName.dialog == 'Groups') {
+      else if (this.modName == 'Groups') {
         this.isOkToSubmit = this.firstName && this.lastName
       }
-      else if (this.modName.dialog == 'Campaings') {
+      else if (useModule.dialog == 'Campaings') {
         this.isOkToSubmit = this.firstName && this.lastName
       }
-      else if (this.modName.dialog == 'Messages' | this.modName.dialog == 'Chamadas' | this.modName.dialog == 'WhatsApp' | this.modName.dialog == 'E-mail') {
+      else if (useModule.dialog == 'Messages' | useModule.dialog == 'Chamadas' | useModule.dialog == 'WhatsApp' | useModule.dialog == 'E-mail') {
         this.isOkToSubmit = this.firstName && this.lastName
       }
-      else if (this.modName.dialog == 'Histórico') {
+      else if (useModule.dialog == 'Histórico') {
         this.isOkToSubmit = this.firstName && this.lastName
       }
-      else if (this.modName.dialog == 'Contas') {
+      else if (useModule.dialog == 'Contas') {
         this.isOkToSubmit = this.firstName && this.lastName
       }
-      else if (this.modName.dialog == 'Settings') {
+      else if (useModule.dialog == 'Settings') {
         this.isOkToSubmit = this.firstName && this.lastName
       }
       // alert(this.isOkToSubmit)
@@ -2058,16 +2089,35 @@ export default {
       }, 5 * 1000);
     },
     openDialog: function (item) {
-      this.modName = item
-      console.log(item)
-      alert(item.dialog)
+      // localStorage.setItem('module', item.dialog)
+      // $modNameX = localStorage.module
+      //useModule = item.dialog
+      // alert(this.modName)
+      
+    
+      // this.$set(this.modName, item.dialog);
+      //useModule = item.dialog
+
+      // this.$store.commit(item.dialog)
+      // app.config.globalProperties.$modNameX = localStorage.module;
+      //useModule = item;
+       
+      // document.getElementById('MID').innerText = item.dialog
+      // console.log(app.config.globalProperties.$modNameX)
+      // alert(app.config.globalProperties.$modNameX)
+
+      // alert(this.useModule.name)
     },
+    // increment(){
+    //   this.$store.commit('increment')
+    //   console.log(this.$store.state.count)
+    // }
   }
 }
 </script>
 
 <style>
-.activateBtn {}
+/* .activateBtn {} */
 
 .v-label {
   font-size: small;

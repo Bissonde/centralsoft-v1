@@ -35,6 +35,9 @@ export default defineConfig({
       '.vue',
     ],
   },
+  build:{
+    outDir: "./www/production/"
+  },
   server: {
     port: 3000,
   },
